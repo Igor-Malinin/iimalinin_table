@@ -30,13 +30,13 @@ export default {
     async fetchData() {
       try {
         this.isDataLoading = true
-        // Это для того, чтобы вы могли посмотреть рабочий проект на githubPages.
-        // Обращение к json файл хранящемуся в отдельном репозитории
+        // Это для того, чтобы можно было посмотреть рабочий проект без запуска json сервера
         const response = await axios.get('https://igor-malinin.github.io/dataJson/data.json', {})
 
-        // Это для загрузки json файла локально через запуск json-server data.json
+        // Это для загрузки json файла локально через запуск команды "json-server data.json"
         // const response = await axios.get('http://localhost:3000/items', {})
-
+        // из-за того, что в обращении к файлу на gitGist не поддерживается обращение к
+        // хедер параметрам, не стал использовать ?_limit=10 и прочие вещи, сделал свои
         this.totalPages = Math.ceil(response.data.length/this.limit)
         this.tableData = response.data
       }
