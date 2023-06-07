@@ -1,8 +1,8 @@
 <template>
   <div class="app">
     <nav>
-      <router-link to="/">Главная</router-link> |
-      <router-link to="/table">Таблица</router-link>
+      <router-link class="nav_link" to="/">Главная</router-link>
+      <router-link class="nav_link" to="/table">Таблица</router-link>
     </nav>
     <router-view/>
   </div>
@@ -40,11 +40,22 @@ nav {
 
   a {
     font-weight: bold;
-    color: #f55c00;
-
+    color: #626262;
+    text-decoration: none;
+    padding: 5px;
+    border-top: 2px solid #626262;
+    border-bottom: 2px solid #626262;
+    transition: all 0.2s ease;
     &.router-link-exact-active {
-      color: #626262;
+      color: #f55c00;
+      border-left: 2px solid #f55c00;
+      border-right: 2px solid #f55c00;
+      border-top: none;
+      border-bottom: none;
     }
+  }
+  a:first-child {
+    margin-right: 10px;
   }
 }
 

@@ -3,42 +3,33 @@
     <restaurants-control
       :selectedOptions="selectedOptions"
       :sortOptions="sortOptions"
+      :tableData="tableData.length"
+      v-model="newLimit"
     />
-    <table class="table__restaurants">
-      <thead>
-      <tr>
-        <th v-if="selectedOptions.includes('business_name')">Название Ресторана</th>
-        <th v-if="selectedOptions.includes('business_address')">Адрес ресторана</th>
-        <th v-if="selectedOptions.includes('business_city')">Город</th>
-        <th v-if="selectedOptions.includes('business_phone_number')">Номер ресторана</th>
-        <th v-if="selectedOptions.includes('inspection_date')">Дата инспекции</th>
-        <th v-if="selectedOptions.includes('inspection_description')">Статус инспекции</th>
-        <th v-if="selectedOptions.includes('inspection_type')">Тип инспекции</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="dataT in searchData">
-        <td v-if="selectedOptions.includes('business_name')">{{dataT.business_name}}</td>
-        <td v-if="selectedOptions.includes('business_address')">{{dataT.business_address}}</td>
-        <td v-if="selectedOptions.includes('business_city')">{{dataT.business_city}}</td>
-        <td v-if="selectedOptions.includes('business_phone_number')">{{dataT.business_phone_number}}</td>
-        <td v-if="selectedOptions.includes('inspection_date')">{{dataT.inspection_date}}</td>
-        <td v-if="selectedOptions.includes('inspection_description')">{{dataT.inspection_description}}</td>
-        <td v-if="selectedOptions.includes('inspection_type')">{{dataT.inspection_type}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <table-data
+      :tableData="searchData"
+      :selectedOptions="selectedOptions"
+    ></table-data>
+    <restaurants-footer
+      v-model="page"
+      :pages="pagesAmount"
+      :searchData="searchData.length"
+      :elementsNum="elementsNum"
+      v-if="this.selectedOptions.length>0"
+    ></restaurants-footer>
+    <h3 v-else>Выберите данные для отображения в списке "Редактировать таблицу"</h3>
   </div>
 </template>
 
 <script>
 import RestaurantsControl from "@/components/RestaurantsControl.vue";
-import {mapState} from "vuex";
-import {searchModule} from "@/store/searchModule";
+import RestaurantsFooter from "@/components/RestaurantsFooter.vue";
+import index, {mapState} from "vuex";
+import TableData from "@/components/TableData.vue";
 
 export default {
   name: "restaurants-table",
-  components: {RestaurantsControl},
+  components: {RestaurantsFooter, RestaurantsControl, TableData},
   props: {
     tableData: Array,
     required: true,
@@ -47,6 +38,12 @@ export default {
   },
   data() {
     return {
+      page: 0,
+      newLimit: this.limit,
+      elementsNum: this.tableData.length,
+      pagesAmount: this.pages,
+      newData: {},
+      newTableData: [],
       selectedOptions: [
         'business_name',
         'business_address',
@@ -69,71 +66,46 @@ export default {
   },
   computed: {
     ...mapState({
-      searchQuery: state => state.search.searchQuery
+      searchQuery: state => state.search.searchQuery,
+      selectedSort: state => state.search.selectedSort
     }),
-    sortedPosts() {
-      console.log(this.selectedOptions)
-      return [...this.tableData].sort((post1, post2) => {
+    sortTable() {
+      this.newTableData = []
+      this.tableData.forEach((data, index) => {
+        this.newData = {}
+        for(let value of this.selectedOptions)
+          this.newData[value] = data[value]
+        this.newTableData.push(this.newData)
+      })
+      return [...this.newTableData].sort((post1, post2) => {
+        if (Number(post1[this.selectedSort]))
+          return parseInt(post1[this.selectedSort]) - parseInt(post2[this.selectedSort])
         return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
       })
     },
     searchData() {
-      let filtered = this.tableData.filter(data =>
+      // replace конечно бы еще доработать, чтобы лишние символы убрать,
+      // но там в названиях встречаются двойные кавычки, поэтому убрал только ключи из json,
+      // чтобы по ним поиск не осуществлялся
+      let filtered = this.sortTable.filter(data =>
         JSON.stringify(data)
-        .toLowerCase()
+        .toLowerCase().
+        replace(/business_name|business_address|business_city|business_phone_number|inspection_date|inspection_description|inspection_type/g, (word) => {
+            return {
+              'business_name': '', 'business_address': '', 'business_city': '', 'business_phone_number': '', 'inspection_date': '', 'inspection_description': '', 'inspection_type': ''}[word]}
+        )
         .includes(this.searchQuery.toLowerCase())
       )
+      this.elementsNum = filtered.length
+      this.pagesAmount = Math.ceil(this.elementsNum / this.newLimit)
+      return filtered.slice(this.page * this.newLimit, this.newLimit + (this.page * this.newLimit))
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.table__restaurants {
-  width: 100%;
-  margin: 0 auto;
-  border: 1px solid #000;
-  border-collapse: collapse;
-
-}
-
-.table__restaurants thead th {
-  position: relative;
-  height: 60px;
-  padding: 10px;
-  line-height: 20px;
-  border-bottom: 2px solid #000;
-}
-.table__restaurants thead th:after {
-  position: absolute;
-  top: 19px;
-  right: -26px;
-  content: "–";
-  font-size: 70px;
-  font-weight: 100;
-  transform: rotate(90deg);
-}
-.table__restaurants thead th:last-child:after {
-  content: "";
-}
-
-.table__restaurants tbody td {
-  position: relative;
-  height: 70px;
-  padding: 10px;
-  border-top: 1px solid #000;
-}
-.table__restaurants tbody td:after {
-  position: absolute;
-  top: 7px;
-  right: -26px;
-  content: "—";
-  color: #9a9a9a;
-  font-size: 40px;
-  font-weight: 100;
-  transform: rotate(90deg);
-}
-.table__restaurants tbody td:last-child:after {
-  content: "";
+h3 {
+  margin-top: 20px;
 }
 </style>

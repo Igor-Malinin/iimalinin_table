@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {searchModule} from "@/store/searchModule";
+import {sortSearchModule} from "@/store/sortSearchModule";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    search: searchModule
+    search: sortSearchModule
   }
 })

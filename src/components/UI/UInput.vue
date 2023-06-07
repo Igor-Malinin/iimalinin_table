@@ -18,8 +18,11 @@ export default {
 
 <style lang="scss" scoped>
 .input {
-  width: 430px;
+  width: 230px;
   height: 40px;
   padding: 0 15px;
+  background-color: #fff;
+  border: 1px solid #2c3e50;
+  border-radius: 3px;
 }
 </style>
