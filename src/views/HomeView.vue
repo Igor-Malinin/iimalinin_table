@@ -11,7 +11,7 @@
     </div>
     <div class="tasks">
       <div class="junior__part">
-        <h3>Задача</h3>
+        <h3>Задание для junnior разработчиков</h3>
         <ol>
           <li>Загрузить JSON с помощью REST запроса (локальное из статической папки);<span class="done">Сделано</span></li>
           <li>Отобразить в таблице;<span class="done">Сделано</span></li>
@@ -21,7 +21,7 @@
         </ol>
       </div>
       <div class="middle__part">
-        <h3>Задача</h3>
+        <h3>Задание повышенной сложности</h3>
         <ol>
           <li>Загрузить JSON с помощью HTTP запроса (локальное из статической папки);<span class="done">+- Если под HTTP подразумевается REST то сделано</span></li>
           <li>Отобразить в таблице;<span class="done">Сделано</span></li>
