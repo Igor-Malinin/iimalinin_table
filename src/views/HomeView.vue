@@ -11,7 +11,7 @@
     </div>
     <div class="tasks">
       <div class="junior__part">
-        <h3>Задание для junnior разработчиков</h3>
+        <h3>Задание для junior разработчиков</h3>
         <ol>
           <li>Загрузить JSON с помощью REST запроса (локальное из статической папки);<span class="done">Сделано</span></li>
           <li>Отобразить в таблице;<span class="done">Сделано</span></li>
@@ -23,7 +23,7 @@
       <div class="middle__part">
         <h3>Задание повышенной сложности</h3>
         <ol>
-          <li>Загрузить JSON с помощью HTTP запроса (локальное из статической папки);<span class="done">+- Если под HTTP подразумевается REST то сделано</span></li>
+          <li>Загрузить JSON с помощью HTTP запроса (локальное из статической папки);<span class="done">Сделано</span></li>
           <li>Отобразить в таблице;<span class="done">Сделано</span></li>
           <li>Список полей для кнопки “Редактировать таблицу” business_name(наименование организации), business_address(адрес организации), business_city(город организации), business_phone_number(номер организации),  inspection_date(дата инспекции), inspection_description(статус инспекции),  inspection_type(тип проведения инспекции);<span class="done">Сделано</span></li>
           <li>Иметь возможность добавления и скрытия полей;<span class="done">Сделано</span></li>
