@@ -97,6 +97,9 @@ export default {
         .includes(this.searchQuery.toLowerCase())
       )
       this.elementsNum = filtered.length
+      if (this.newLimit > 10) {
+        this.page = 0
+      }
       this.pagesAmount = Math.ceil(this.elementsNum / this.newLimit)
       return filtered.slice(this.page * this.newLimit, this.newLimit + (this.page * this.newLimit))
     }

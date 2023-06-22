@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     incrementPage() {
+      this.newPage = this.page
       this.$emit('change', ++this.newPage)
     },
     decrementPage() {
