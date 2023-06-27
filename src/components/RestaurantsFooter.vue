@@ -2,7 +2,7 @@
   <div class="table__footer">
     <div class="pages__btns">
       <div class="entry__amount">
-        <p>Всего элементов <strong>{{searchData}} из {{elementsNum}}</strong></p>
+        <p>Всего элементов <strong>{{searchSortData}} из {{elementsNum}}</strong></p>
       </div>
       <div class="pages__btns-inner">
         <u-button @click.native="decrementPage" :disabled="page === 0"> < </u-button>
@@ -23,7 +23,7 @@ export default {
   props: {
     page: Number,
     pages: Number,
-    searchData: Number,
+    searchSortData: Number,
     elementsNum: Number
   },
   data() {

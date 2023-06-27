@@ -2,15 +2,15 @@
   <div class="select">
     <p class="toggle" @click="displaySelect = !displaySelect">Редактировать таблицу</p>
     <div class="option__inner">
-      <div class="option" v-for="option in options" :class="{show: displaySelect}">
+      <div class="option" v-for="(option, index) in columns" :class="{show: displaySelect}">
         <span>
-          <input class="checkbox" type="checkbox" :id="option.value" @change="changeOption" checked>
-          <label class="checkbox" :for="option.value">{{option.name}}</label>
+          <input class="checkbox" type="checkbox" :id="option.key" @change="changeOption(index)" :checked="option.isVisible">
+          <label class="checkbox" :for="option.key">{{option.title}}</label>
         </span>
         <u-button
           class="sort__btn"
-          @click.native="$emit('selectedSort', option.value)"
-          :disabled="!checkedList.includes(option.value)"
+          @click.native="$emit('selectedSort', option.key)"
+          :disabled="!checkedList.includes(option)"
         >
           Сортировать
         </u-button>
@@ -20,33 +20,26 @@
 </template>
 
 <script>
+import {indexOf} from "core-js/internals/array-includes";
+
 export default {
   name: "u-select",
   model: {
-    prop: 'checked',
+    prop: 'columns',
     event: 'change'
   },
   props: {
-    checked: Array,
-    options: Array,
-
+    columns: Array
   },
   data() {
     return {
       displaySelect: true,
-      checkedList: this.checked
+      checkedList: this.columns
     }
   },
   methods: {
-    changeOption(event) {
-      if(event.target.checked) {
-        this.checkedList.push(event.target.id)
-        this.$emit('change', this.checkedList)
-      }
-      else {
-        this.checkedList.splice(this.checkedList.indexOf(event.target.id), 1)
-        this.$emit('change', this.checkedList)
-      }
+    changeOption(index) {
+      this.$emit('change', this.checkedList[index].isVisible = !this.checkedList[index].isVisible)
     },
   }
 }

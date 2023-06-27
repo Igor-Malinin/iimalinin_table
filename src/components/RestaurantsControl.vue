@@ -4,9 +4,8 @@
     <div class="control-elements">
       <u-select
           class="select"
-          v-model="selectedOptions"
-          :options="sortOptions"
           :value="selectedSort"
+          :columns="columns"
           @selectedSort="setSelectedSort"
       ></u-select>
       <u-input
@@ -36,8 +35,7 @@ export default {
     event: 'changeLimit'
   },
   props: {
-    selectedOptions: Array,
-    sortOptions: Array,
+    columns: Array,
     tableData: Number,
     newLimit: Number
   },

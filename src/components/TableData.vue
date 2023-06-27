@@ -2,24 +2,12 @@
   <table class="table__restaurants">
     <thead>
     <tr>
-      <th v-if="selectedOptions.includes('business_name')">Название Ресторана</th>
-      <th v-if="selectedOptions.includes('business_address')">Адрес ресторана</th>
-      <th v-if="selectedOptions.includes('business_city')">Город</th>
-      <th v-if="selectedOptions.includes('business_phone_number')">Номер ресторана</th>
-      <th v-if="selectedOptions.includes('inspection_date')">Дата инспекции</th>
-      <th v-if="selectedOptions.includes('inspection_description')">Статус инспекции</th>
-      <th v-if="selectedOptions.includes('inspection_type')">Тип инспекции</th>
+      <th v-for="column in columns">{{column.title}}</th>
     </tr>
     </thead>
     <tbody>
-    <tr class="inspection_description" v-for="dataT in tableData" :id="dataT.inspection_description">
-      <td v-if="selectedOptions.includes('business_name')">{{dataT.business_name}}</td>
-      <td v-if="selectedOptions.includes('business_address')">{{dataT.business_address}}</td>
-      <td v-if="selectedOptions.includes('business_city')">{{dataT.business_city}}</td>
-      <td v-if="selectedOptions.includes('business_phone_number')">{{dataT.business_phone_number}}</td>
-      <td v-if="selectedOptions.includes('inspection_date')">{{dataT.inspection_date}}</td>
-      <td v-if="selectedOptions.includes('inspection_description')">{{dataT.inspection_description}}</td>
-      <td v-if="selectedOptions.includes('inspection_type')">{{dataT.inspection_type}}</td>
+    <tr v-for="dataT in tableData" :style="getColor(dataT.inspection_description)">
+      <td v-for="column in columns">{{dataT[column.key]}}</td>
     </tr>
     </tbody>
   </table>
@@ -31,11 +19,22 @@ export default {
   props: {
     tableData: Array,
     selectedOptions: Array,
+    columns: Array
+  },
+  methods: {
+    isExists() {
+      return this.columns.filter(column => column.key === 'inspection_description')[0]
+    },
+    getColor(color) {
+      if(this.isExists())
+        return `background-color: ${this.isExists().colors[color.split(' ').join('')]}`
+      return 'background-color: #f1f1f1'
+    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .table__restaurants {
   width: 100%;
   margin: 0 auto;
@@ -83,28 +82,4 @@ export default {
   content: "";
 }
 
-.inspection_description[id='NO ACTION'] {
-  background-color: #dcff98;
-}
-.inspection_description[id='REINSPECTION REQUIRED'] {
-  background-color: #ffc8c8;
-}
-.inspection_description[id='ISSUED PERMIT'] {
-  background-color: #fff595;
-}
-.inspection_description[id='ENFORCEMENT INSPECTION REQUIRED'] {
-  background-color: #ff6c6c;
-}
-.inspection_description[id='SHORTER DATE ADVANCE'] {
-  background-color: #9ae1ff;
-}
-.inspection_description[id='LONGER DATE ADVANCE'] {
-  background-color: #f1e4ff;
-}
-.inspection_description[id='CLOSED FACILITY'] {
-  background-color: #bbbbbb;
-}
-.inspection_description[id='CLOSED FACILITY AND RE-OPENED'] {
-  background-color: #b6ffe8;
-}
 </style>
